@@ -3,7 +3,7 @@
  */
 
 #include "tiered_cache.h"
-
+#include "consumer/ndncatchunks.hpp"
 #include <string>
 #include <vector>
 
@@ -18,7 +18,12 @@ TieredCacheManager::Open(const shash::Any &id)
   if (fd >= 0) {return fd;}
 
   int fd2 = lower_->Open(id);
-  if (fd2 < 0) {return fd;}  // NOTE: use error code from upper.
+  if (fd2 < 0) {
+// call ndn to download the file
+//	ndn::chunks::ndnChunks nchunks;
+//	string ndnName = "/ndn/common.hpp";
+//	nchunks.startChunk(ndnName);
+	return fd;}  // NOTE: use error code from upper.
 
   // Lower cache hit; upper cache miss.  Copy object into the
   // upper cache.
