@@ -20,9 +20,10 @@ TieredCacheManager::Open(const shash::Any &id)
   int fd2 = lower_->Open(id);
   if (fd2 < 0) {
 // call ndn to download the file
-//	ndn::chunks::ndnChunks nchunks;
-//	string ndnName = "/ndn/common.hpp";
-//	nchunks.startChunk(ndnName);
+	ndn::chunks::ndnChunks nchunks;
+	std::string ndnName = "/ndn/common.hpp";
+//	nchunks.s();
+	int retNDN = nchunks.startChunk(ndnName);
 	return fd;}  // NOTE: use error code from upper.
 
   // Lower cache hit; upper cache miss.  Copy object into the

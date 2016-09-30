@@ -26,6 +26,19 @@ set (CVMFS_LOADER_SOURCES
 )
 
 set (CVMFS_CLIENT_SOURCES
+  consumer/ndncatchunks.hpp
+  consumer/ndncatchunks.cpp
+  consumer/consumer.hpp consumer/consumer.cpp
+  consumer/data-fetcher.cpp consumer/data-fetcher.hpp
+  consumer/discover-version-fixed.cpp consumer/discover-version-fixed.hpp 
+  consumer/discover-version-iterative.hpp 
+  consumer/discover-version-iterative.cpp 
+  consumer/discover-version.cpp consumer/discover-version.hpp 
+  consumer/ndncatchunks.cpp 
+  consumer/options.cpp consumer/options.hpp 
+  consumer/pipeline-interests.cpp consumer/pipeline-interests.hpp 
+  consumer/common.hpp consumer/version.cpp consumer/version.hpp 
+  consumer/pipeline-interests-fixed-window.cpp consumer/pipeline-interests-fixed-window.cpp
   atomic.h
   authz/authz.h authz/authz.cc
   authz/authz_curl.h authz/authz_curl.cc
@@ -321,7 +334,7 @@ set (CVMFS_PRELOADER_SOURCES
 # configure some compiler flags for proper build
 #
 
-set (CVMFS_LOADER_CFLAGS "${CVMFS_LOADER_CFLAGS} -DCVMFS_CLIENT -DCVMFS_NAMESPACE_GUARD=loader")
+set (CVMFS_LOADER_CFLAGS "${CVMFS_LOADER_CFLAGS} -std=c++11 -DCVMFS_CLIENT -DCVMFS_NAMESPACE_GUARD=loader")
 
 set (CVMFS2_CFLAGS "${CVMFS2_CFLAGS} -DCVMFS_CLIENT -D_FILE_OFFSET_BITS=64 -fexceptions")
 set (CVMFS2_DEBUG_CFLAGS "${CVMFS2_DEBUG_CFLAGS} ${CVMFS2_CFLAGS} -D_FILE_OFFSET_BITS=64 -O0 -DDEBUGMSG")
@@ -335,7 +348,7 @@ set (LIBCVMFS_CFLAGS "${LIBCVMFS_CFLAGS} -D_FILE_OFFSET_BITS=64 -DCVMFS_CLIENT -
 #
 # set some include and linking stuff
 #
-set (CVMFS2_LD_FLAGS "${CVMFS2_LD_FLAGS} -ldl -lm")
+set (CVMFS2_LD_FLAGS "${CVMFS2_LD_FLAGS} -ldl -lm -lboost_system")
 include_directories (cvmfs ${INCLUDE_DIRECTORIES})
 
 #
@@ -416,7 +429,7 @@ if (BUILD_CVMFS)
 
   target_link_libraries (cvmfs2 ${CVMFS_LOADER_LIBS} ${OPENSSL_LIBRARIES}
                                 ${LIBFUSE} ${RT_LIBRARY} ${UUID_LIBRARIES}
-                                ${SHA3_ARCHIVE} pthread dl)
+                                ${SHA3_ARCHIVE} pthread dl -lndn-cxx -lboost_system -lboost_filesystem -lboost_date_time -lboost_iostreams -lboost_regex -lboost_program_options -lboost_chrono -lboost_random -lboost_thread -lboost_log -lboost_log_setup -lcryptopp -lssl -lcrypto -lsqlite3 -lrt -lpthread -lboost_system -lboost_iostreams -lboost_regex )
   target_link_libraries (cvmfs_fuse_debug ${CVMFS2_DEBUG_LIBS} ${CVMFS_FUSE_LINK_LIBRARIES})
   target_link_libraries (cvmfs_fuse       ${CVMFS2_LIBS} ${CVMFS_FUSE_LINK_LIBRARIES})
   target_link_libraries (cvmfs_fsck       ${CVMFS_FSCK_LIBS} ${ZLIB_LIBRARIES}
@@ -498,7 +511,7 @@ if (BUILD_LIBCVMFS)
   add_dependencies (libcvmfs cvmfs_only)
 
   add_executable( test_libcvmfs ${TEST_LIBCVMFS_SOURCES} )
-  target_link_libraries( test_libcvmfs ${CMAKE_CURRENT_BINARY_DIR}/libcvmfs.a ${SQLITE3_LIBRARY} ${CARES_LIBRARIES} ${CURL_LIBRARIES} ${PACPARSER_LIBRARIES} ${ZLIB_LIBRARIES} ${OPENSSL_LIBRARIES} ${RT_LIBRARY} ${UUID_LIBRARIES} pthread dl )
+  target_link_libraries( test_libcvmfs ${CMAKE_CURRENT_BINARY_DIR}/libcvmfs.a ${SQLITE3_LIBRARY} ${CARES_LIBRARIES} ${CURL_LIBRARIES} ${PACPARSER_LIBRARIES} ${ZLIB_LIBRARIES} ${OPENSSL_LIBRARIES} ${RT_LIBRARY} ${UUID_LIBRARIES} pthread dl -lndn-cxx -lboost_system -lboost_filesystem -lboost_date_time -lboost_iostreams -lboost_regex -lboost_program_options -lboost_chrono -lboost_random -lboost_thread -lboost_log -lboost_log_setup -Wl,-Bstatic -Wl,-Bdynamic -L/usr/local/lib -L/usr/lib/x86_64-linux-gnu -lcryptopp -lssl -lcrypto -lsqlite3 -lrt -lpthread)
   add_dependencies (test_libcvmfs libcvmfs)
 endif (BUILD_LIBCVMFS)
 
