@@ -35,7 +35,7 @@ namespace chunks {
  int
  ndnChunks::startChunk(std::string ndnName)
 {
-	//std::string programName(argv[0]);
+
 	Options options;
 	std::string discoverType("fixed");
 	std::string pipelineType("fixed");
@@ -43,46 +43,6 @@ namespace chunks {
 	int maxRetriesAfterVersionFound(1);
 	std::string uri = ndnName;
 
-	namespace po = boost::program_options;
-	po::options_description visibleDesc("Options");
-	visibleDesc.add_options()
-			("lifetime,l",  po::value<uint64_t>()->default_value(options.interestLifetime.count()),
-	                    "lifetime of expressed Interests, in milliseconds")
-			("pipeline,p",  po::value<size_t>(&maxPipelineSize)->default_value(maxPipelineSize),
-						"maximum size of the Interest pipeline")
-			;
-
-
-	po::options_description hiddenDesc("Hidden options");
-	//hiddenDesc.add_options()
-	//    		("ndn-name,n", po::value<std::string>(&uri), "NDN name of the requested content");
-
-
-
-	po::positional_options_description p;
-	p.add("ndn-name", -1);
-
-	po::options_description optDesc("Allowed options");
-	optDesc.add(visibleDesc).add(hiddenDesc);
-
-	po::variables_map vm;
-
-	int argc;
-	char** argv;
-
-
-		try {
-			po::store(po::command_line_parser(argc, argv).options(optDesc).positional(p).run(), vm);
-			po::notify(vm);
-		}
-		catch (const po::error& e) {
-			std::cerr << "ERROR: " << e.what() << std::endl;
-			return 2;
-		}
-		catch (const boost::bad_any_cast& e) {
-			std::cerr << "ERROR: " << e.what() << std::endl;
-			return 2;
-		}
 
 	Name prefix(uri);
 
@@ -91,12 +51,7 @@ namespace chunks {
 		return 2;
 	}
 
-	//  if (options.maxRetriesOnTimeoutOrNack < -1 || options.maxRetriesOnTimeoutOrNack > 1024) {
-	//    std::cerr << "ERROR: retries value must be between -1 and 1024" << std::endl;
-	//    return 2;
-	//  }
-
-	options.interestLifetime = time::milliseconds(vm["lifetime"].as<uint64_t>());
+	//options.interestLifetime = time::milliseconds(vm["lifetime"].as<uint64_t>());
 
 	try {
 		Face face;

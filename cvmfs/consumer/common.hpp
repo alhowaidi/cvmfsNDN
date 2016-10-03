@@ -49,13 +49,13 @@
 #include <unordered_set>
 #include <vector>
 
-#include <boost/asio.hpp>
-#include <boost/assert.hpp>
+//#include <boost/asio.hpp>
+//#include <boost/assert.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/noncopyable.hpp>
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/variables_map.hpp>
-#include <boost/program_options/parsers.hpp>
+//#include <boost/noncopyable.hpp>
+//#include <boost/program_options/options_description.hpp>
+//#include <boost/program_options/variables_map.hpp>
+//#include <boost/program_options/parsers.hpp>
 
 #include <ndn-cxx/data.hpp>
 #include <ndn-cxx/face.hpp>
