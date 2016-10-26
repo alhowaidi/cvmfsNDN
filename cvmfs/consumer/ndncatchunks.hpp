@@ -48,7 +48,7 @@ class ndnChunks {
 public:
 ndnChunks(){};
 
-int startChunk(std::string name);
+int startChunk(std::string name, std::string pathName);
 
 };
 

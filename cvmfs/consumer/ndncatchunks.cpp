@@ -33,7 +33,7 @@ namespace ndn {
 namespace chunks {
 
  int
- ndnChunks::startChunk(std::string ndnName)
+ ndnChunks::startChunk(std::string ndnName, std::string pathName)
 {
 
 	Options options;
@@ -44,6 +44,8 @@ namespace chunks {
 	std::string uri = ndnName;
 
 
+	std::string fileName = pathName + ndnName;
+	uri = "/ndn/"+uri;
 	Name prefix(uri);
 
 	if (maxPipelineSize < 1 || maxPipelineSize > 1024) {
@@ -58,12 +60,12 @@ namespace chunks {
 
 		unique_ptr<DiscoverVersion> discover;
 		//   if (discoverType == "fixed") {
-		//     discover = make_unique<DiscoverVersionFixed>(prefix, face, options);
+		     discover = make_unique<DiscoverVersionFixed>(prefix, face, options);
 		//   }
 		//   else if (discoverType == "iterative") {
-		DiscoverVersionIterative::Options optionsIterative(options);
-		optionsIterative.maxRetriesAfterVersionFound = maxRetriesAfterVersionFound;
-		discover = make_unique<DiscoverVersionIterative>(prefix, face, optionsIterative);
+//		DiscoverVersionIterative::Options optionsIterative(options);
+//		optionsIterative.maxRetriesAfterVersionFound = maxRetriesAfterVersionFound;
+//		discover = make_unique<DiscoverVersionIterative>(prefix, face, optionsIterative);
 		//  }
 		//   else {
 		//     std::cerr << "ERROR: discover version type not valid" << std::endl;
@@ -81,8 +83,13 @@ namespace chunks {
 			return 2;
 		}
 
+		std::ofstream m_outputStream;
+		//std::cerr << "file name is " + fileName << std::endl;
+		if(!m_outputStream.is_open())
+			m_outputStream.open (fileName, std::ios::out | std::ios::app );
+
 		ValidatorNull validator;
-		Consumer consumer(validator, options.isVerbose);
+		Consumer consumer(validator, options.isVerbose, m_outputStream);
 
 		BOOST_ASSERT(discover != nullptr);
 		BOOST_ASSERT(pipeline != nullptr);
@@ -90,6 +97,8 @@ namespace chunks {
 
 		consumer.run(std::move(discover), std::move(pipeline));
 		face.processEvents();
+
+		m_outputStream.close();
 	}
 	catch (const Consumer::ApplicationNackError& e) {
 		std::cerr << "ERROR: " << e.what() << std::endl;

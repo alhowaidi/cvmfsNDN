@@ -30,7 +30,7 @@
 namespace ndn {
 namespace chunks {
 
-Consumer::Consumer(Validator& validator, bool isVerbose, std::ostream& os)
+Consumer::Consumer(Validator& validator, bool isVerbose, std::ofstream& os)
   : m_validator(validator)
   , m_outputStream(os)
   , m_nextToPrint(0)

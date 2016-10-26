@@ -186,11 +186,13 @@ bool FileSystem::CreateCache() {
   // If there's a second cache directory to use, we upgrade the cache mgr to
   // a tiered cache.
   if (second_cache_dir_.size()) {
+	//  printf("in second_cache_dir\n");
     cache::CacheManager *second_cache_mgr = cache::PosixCacheManager::Create(
                                second_cache_dir_,
                                second_cache_mode_ & FileSystem::kCacheAlien,
                                second_cache_mode_ & FileSystem::kCacheNoRename);
     if (second_cache_mgr == NULL) {
+    	//printf("second_cache_mgr is null\n");
       boot_error_ = "Failed to setup secondary cache in " + second_cache_dir_ +
                     ": " + strerror(errno);
       boot_status_ = loader::kFailCacheDir;
@@ -201,10 +203,12 @@ bool FileSystem::CreateCache() {
                                           cache_mgr_,
                                           second_cache_mgr);
     if (tiered_cache == NULL) {
+    //	printf("tiered_cache mgr is NUL\n");
       boot_error_ = "Failed to setup tiered cache manager.";
       boot_status_ = loader::kFailCacheDir;
       return false;
     }
+   // printf("tiered_cache is OK \n");
     cache_mgr_ = tiered_cache;
   }
   return true;

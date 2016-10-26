@@ -59,7 +59,7 @@ public:
   /**
    * @brief Create the consumer
    */
-  Consumer(Validator& validator, bool isVerbose, std::ostream& os = std::cout);
+  Consumer(Validator& validator, bool isVerbose, std::ofstream& os);
 
   /**
    * @brief Run the consumer
@@ -86,7 +86,7 @@ PUBLIC_WITH_TESTS_ELSE_PRIVATE:
 
 private:
   Validator& m_validator;
-  std::ostream& m_outputStream;
+  std::ofstream& m_outputStream;
   unique_ptr<DiscoverVersion> m_discover;
   unique_ptr<PipelineInterests> m_pipeline;
   uint64_t m_nextToPrint;
