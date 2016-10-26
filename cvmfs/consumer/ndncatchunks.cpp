@@ -84,12 +84,13 @@ namespace chunks {
 		}
 
 		std::ofstream m_outputStream;
-		//std::cerr << "file name is " + fileName << std::endl;
-		if(!m_outputStream.is_open())
-			m_outputStream.open (fileName, std::ios::out | std::ios::app );
+//		//std::cerr << "file name is " + fileName << std::endl;
+//		if(!m_outputStream.is_open())
+//			m_outputStream.open (fileName, std::ios::out | std::ios::app );
 
 		ValidatorNull validator;
-		Consumer consumer(validator, options.isVerbose, m_outputStream);
+		//Consumer consumer(validator, options.isVerbose, m_outputStream);
+		Consumer consumer(validator, options.isVerbose, fileName, m_outputStream);
 
 		BOOST_ASSERT(discover != nullptr);
 		BOOST_ASSERT(pipeline != nullptr);
@@ -98,7 +99,7 @@ namespace chunks {
 		consumer.run(std::move(discover), std::move(pipeline));
 		face.processEvents();
 
-		m_outputStream.close();
+		//m_outputStream.close();
 	}
 	catch (const Consumer::ApplicationNackError& e) {
 		std::cerr << "ERROR: " << e.what() << std::endl;

@@ -59,8 +59,8 @@ public:
   /**
    * @brief Create the consumer
    */
-  Consumer(Validator& validator, bool isVerbose, std::ofstream& os);
-
+  //Consumer(Validator& validator, bool isVerbose, std::ofstream& os);
+  Consumer(Validator& validator, bool isVerbose, std::string& fileName, std::ofstream& os);
   /**
    * @brief Run the consumer
    */
@@ -91,6 +91,7 @@ private:
   unique_ptr<PipelineInterests> m_pipeline;
   uint64_t m_nextToPrint;
   bool m_isVerbose;
+  std::string fileName;
 
 PUBLIC_WITH_TESTS_ELSE_PRIVATE:
   std::map<uint64_t, shared_ptr<const Data>> m_bufferedData;

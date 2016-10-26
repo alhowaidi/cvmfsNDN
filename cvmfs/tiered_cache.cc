@@ -24,11 +24,11 @@ TieredCacheManager::Open(const shash::Any &id)
 	// /var/lib/cvmfs/secondary
 	//FileSystem *fs;
 	std::string pathName = "/var/lib/cvmfs/secondary/cms.cern.ch/";
-	//printf("cache path is %s \n", pathName.c_str());
+	printf("cache path is %s \n", pathName.c_str());
 
 	int fd = upper_->Open(id);
 	if (fd >= 0) {
-		//printf(" upper hit .. \n");
+		printf(" upper hit .. \n");
 		return fd;
 	}
 
@@ -40,19 +40,20 @@ TieredCacheManager::Open(const shash::Any &id)
 		ndn::chunks::ndnChunks nchunks;
 		//std::string ndnName = fileName;//"common.hpp";
 
-		//if(fileName.compare("00/00000000000000000000000000000000000000") == 0)
-			return fd;
+		printf("lower miss .. ");
+
 		nchunks.startChunk(fileName,pathName);
 		fd2 = lower_->Open(id);
 		if(fd2 < 0)
 		{
-	//		printf("still lower miss .. ");
+			printf("still lower miss .. ");
 			return fd;
 		}
+
 		//return fd;
 	}  // NOTE: use error code from upper.
 
-//	printf("lower cache hit .. \n");
+	printf("lower cache hit .. \n");
 
 	// Lower cache hit; upper cache miss.  Copy object into the
 	// upper cache.
