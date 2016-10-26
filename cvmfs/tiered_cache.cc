@@ -40,6 +40,8 @@ TieredCacheManager::Open(const shash::Any &id)
 		ndn::chunks::ndnChunks nchunks;
 		//std::string ndnName = fileName;//"common.hpp";
 
+		//if(fileName.compare("00/00000000000000000000000000000000000000") == 0)
+			return fd;
 		nchunks.startChunk(fileName,pathName);
 		fd2 = lower_->Open(id);
 		if(fd2 < 0)
