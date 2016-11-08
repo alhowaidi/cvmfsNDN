@@ -28,7 +28,7 @@
  */
 
 #include "ndncatchunks.hpp"
-
+#include <time.h>
 namespace ndn {
 namespace chunks {
 
@@ -95,9 +95,12 @@ namespace chunks {
 		BOOST_ASSERT(discover != nullptr);
 		BOOST_ASSERT(pipeline != nullptr);
 
-
+clock_t start = clock();    
 		consumer.run(std::move(discover), std::move(pipeline));
 		face.processEvents();
+ clock_t stop = clock();    
+double elapsed = (double)(stop - start) * 1000.0 / CLOCKS_PER_SEC;    
+printf("Time elapsed in ms: %f", elapsed);
 
 		//m_outputStream.close();
 	}
