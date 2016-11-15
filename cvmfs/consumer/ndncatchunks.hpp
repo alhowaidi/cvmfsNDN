@@ -30,6 +30,7 @@
 #ifndef NDNCATCHUNKS_HPP
 #define NDNCATCHUNKS_HPP
 
+#include "../compression.h"
 #include "version.hpp"
 #include "options.hpp"
 #include "consumer.hpp"

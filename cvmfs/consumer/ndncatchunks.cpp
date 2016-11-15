@@ -44,6 +44,7 @@ namespace chunks {
 	std::string uri = ndnName;
 
 
+	std::string fileNameCOM = pathName + ndnName + "COM";
 	std::string fileName = pathName + ndnName;
 	uri = "/ndn/"+uri;
 	Name prefix(uri);
@@ -72,37 +73,41 @@ namespace chunks {
 		//    return 2;
 		// }
 
-		unique_ptr<PipelineInterests> pipeline;
-		if (pipelineType == "fixed") {
-			PipelineInterestsFixedWindow::Options optionsPipeline(options);
-			optionsPipeline.maxPipelineSize = maxPipelineSize;
-			pipeline = make_unique<PipelineInterestsFixedWindow>(face, optionsPipeline);
-		}
-		else {
-			std::cerr << "ERROR: Interest pipeline type not valid" << std::endl;
-			return 2;
-		}
+		     unique_ptr<PipelineInterests> pipeline;
+		     if (pipelineType == "fixed") {
+			     PipelineInterestsFixedWindow::Options optionsPipeline(options);
+			     optionsPipeline.maxPipelineSize = maxPipelineSize;
+			     pipeline = make_unique<PipelineInterestsFixedWindow>(face, optionsPipeline);
+		     }
+		     else {
+			     std::cerr << "ERROR: Interest pipeline type not valid" << std::endl;
+			     return 2;
+		     }
 
-		std::ofstream m_outputStream;
-//		//std::cerr << "file name is " + fileName << std::endl;
-//		if(!m_outputStream.is_open())
-//			m_outputStream.open (fileName, std::ios::out | std::ios::app );
+		     std::ofstream m_outputStream;
+		     //		//std::cerr << "file name is " + fileName << std::endl;
+		     //		if(!m_outputStream.is_open())
+		     //			m_outputStream.open (fileName, std::ios::out | std::ios::app );
 
-		ValidatorNull validator;
-		//Consumer consumer(validator, options.isVerbose, m_outputStream);
-		Consumer consumer(validator, options.isVerbose, fileName, m_outputStream);
+		     ValidatorNull validator;
+		     //Consumer consumer(validator, options.isVerbose, m_outputStream);
+		     Consumer consumer(validator, options.isVerbose, fileNameCOM, m_outputStream);
 
-		BOOST_ASSERT(discover != nullptr);
-		BOOST_ASSERT(pipeline != nullptr);
+		     BOOST_ASSERT(discover != nullptr);
+		     BOOST_ASSERT(pipeline != nullptr);
 
-clock_t start = clock();    
-		consumer.run(std::move(discover), std::move(pipeline));
-		face.processEvents();
- clock_t stop = clock();    
-double elapsed = (double)(stop - start) * 1000.0 / CLOCKS_PER_SEC;    
-printf("Time elapsed in ms: %f", elapsed);
+		     clock_t start = clock();    
+		     consumer.run(std::move(discover), std::move(pipeline));
+		     face.processEvents();
+		     clock_t stop = clock();    
+		     double elapsed = (double)(stop - start) * 1000.0 / CLOCKS_PER_SEC;    
+		     printf("Time elapsed in ms: %f \n", elapsed);
 
-		//m_outputStream.close();
+		     zlib::DecompressPath2Path(fileNameCOM,fileName);
+		     printf(" .. done decompressing on consumer .. \n");    
+		     
+		     remove(fileNameCOM.c_str());
+		     //m_outputStream.close();
 	}
 	catch (const Consumer::ApplicationNackError& e) {
 		std::cerr << "ERROR: " << e.what() << std::endl;

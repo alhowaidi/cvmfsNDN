@@ -9,7 +9,8 @@
 #include "hash.h"
 #include "cache_posix.h"
 #include "mountpoint.h"
-
+#include "compression.h"
+#include <stdio.h>
 namespace cache {
 
 #define BUFFER_SIZE (64*1024)
@@ -40,14 +41,28 @@ TieredCacheManager::Open(const shash::Any &id)
 		ndn::chunks::ndnChunks nchunks;
 		//std::string ndnName = fileName;//"common.hpp";
 
-		printf("lower miss .. ");
+		printf("lower miss .. \n");
 
 		nchunks.startChunk(fileName,pathName);
 		fd2 = lower_->Open(id);
+		
 		if(fd2 < 0)
 		{
-			printf("still lower miss .. ");
+			printf("still lower miss .. \n");
 			return fd;
+		}else
+		{
+			//FILE * inFile;
+			//FILE * outFile;
+		//	std::string inName = pathName+fileName+"COM";
+		//	std::string outName = pathName+fileName;
+			//inFile = fopen(inName.c_str(), "r");
+			//outFile = fopen(inName.c_str(),"w");
+			//zlib::DecompressFile2File(inFile,outFile);
+		//	zlib::DecompressPath2Path(inName,outName);
+		  //      printf(" .. done decompressing .. \n");
+			//fclose(inFile);
+			//fclose(outFile);
 		}
 
 		//return fd;
