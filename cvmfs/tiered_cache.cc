@@ -19,13 +19,13 @@ int
 TieredCacheManager::Open(const shash::Any &id)
 {
 	std::string fileName =  id.MakePathWithoutSuffix();
-	//printf("file name is %s \n",fileName.c_str());
+	printf("file name is %s \n",fileName.c_str());
 
 
 	// /var/lib/cvmfs/secondary
 	//FileSystem *fs;
 	std::string pathName = "/var/lib/cvmfs/secondary/cms.cern.ch/";
-	printf("cache path is %s \n", pathName.c_str());
+//	printf("cache path is %s \n", pathName.c_str());
 
 	int fd = upper_->Open(id);
 	if (fd >= 0) {
