@@ -29,6 +29,9 @@
 
 #include "ndncatchunks.hpp"
 #include <time.h>
+#include <stdio.h>
+#include <sys/time.h>
+#include "../logging.h"
 namespace ndn {
 namespace chunks {
 
@@ -96,12 +99,25 @@ namespace chunks {
 		     BOOST_ASSERT(discover != nullptr);
 		     BOOST_ASSERT(pipeline != nullptr);
 
-		     clock_t start = clock();    
+
+ double mtime, seconds, useconds;
+ struct   timeval a;
+ struct   timeval b;
+    gettimeofday(&a, 0);
+
+//		     clock_t start = clock();    
 		     consumer.run(std::move(discover), std::move(pipeline));
 		     face.processEvents();
-		     clock_t stop = clock();    
-		     double elapsed = (double)(stop - start) * 1000.0 / CLOCKS_PER_SEC;    
-		     printf("Time elapsed in ms: %f \n", elapsed);
+//		     clock_t stop = clock();    
+//		     double elapsed = (double)(stop - start) * 1000.0 / CLOCKS_PER_SEC;    
+
+ gettimeofday(&b, 0);
+    seconds  = (double)b.tv_sec  - (double)a.tv_sec;
+    useconds = (double)b.tv_usec - (double)a.tv_usec;
+    mtime = ((seconds) * 1000.0 + useconds/1000.0);
+
+LogCvmfs(kLogCache, kLogDebug, "Elapsed time in ms:  %f", mtime);
+		     printf("Time elapsed in ms: %f \n", mtime);
 
 		     zlib::DecompressPath2Path(fileNameCOM,fileName);
 		     printf(" .. done decompressing on consumer .. \n");    
